@@ -22,3 +22,25 @@ $ tree -a
 ├── dist
 └── ...
 ```
+
+## Syntax
+
+### status check functions
+
+https://docs.github.com/en/actions/learn-github-actions/expressions#status-check-functions
+
+- Avoid to use evaluation syntax(`${{ }}`) for single status check function
+
+```yaml
+- name: Checkout
+  if: always()
+  uses: actions/checkout@v3
+```
+
+- Use `${{ }}` block for evaluating expression
+
+```yaml
+- name: Print exit message
+  if: ${{ cancelled || failure() }}
+  run: echo "Exiting workflow run..."
+```
