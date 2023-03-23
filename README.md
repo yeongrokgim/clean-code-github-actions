@@ -45,6 +45,13 @@ https://docs.github.com/en/actions/learn-github-actions/expressions#status-check
   run: echo "Exiting workflow run..."
 ```
 
+### wraping runtime env
+
+- wrap user-defined environemtn variable with `${}`
+- do not wrap runner-provided environemt variables(usually prefixed with `GITHUB`)
+
+for example: `echo ${FOO} >> $GITHUB_STEP_SUMMARY`
+
 ### inputs and env 
 
 When you want to configure reusable workflow to be triggered with `workflow_dispatch: {}`
