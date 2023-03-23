@@ -74,7 +74,8 @@ When inputs or envs only used in a few steps, especially running very simillar s
   run: echo ${FOO} >> $GITHUB_STEP_SUMMARY
   env:
     FOO: bar
+
 - name: Print with override
   run: echo ${FOO} >> $GITHUB_STEP_SUMMARY
-  env
+  env:
     FOO: 'not bar'
