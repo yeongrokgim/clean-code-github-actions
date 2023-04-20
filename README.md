@@ -70,6 +70,31 @@ env:
 
 It is more cannonical to use capital letter as a environment variable, to match with POSIX convention
 
+#### Letter case for inputs & env
+
+- if `inputs.FOO` directly goes into `env`, use capitals
+- if `inputs.bar` requires further processing or not used for `env` nor environment variables, use lowercases
+
+```yaml
+on:
+  workflow_dispatch:
+    inputs:
+      DOCKER_BUILDKIT:
+        type: string
+        default: "1"
+      condition:
+        type: string
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build docker image
+        if: ${{ inputs.condition == 'docker' }}
+        run: docker build .
+        env:
+          DOCKER_BUILDKIT: ${{ inputs.DOCKER_BUILDKIT }}
+```
+
 ### scope of env
 
 When inputs or envs only used in a few steps, especially running very simillar steps multiple times,
@@ -86,3 +111,4 @@ When inputs or envs only used in a few steps, especially running very simillar s
   run: echo ${FOO} >> $GITHUB_STEP_SUMMARY
   env:
     FOO: 'not bar'
+
