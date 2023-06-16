@@ -40,6 +40,49 @@ jobs:
       - run: ./configure && make && make install
 ```
 
+### Adding comments in steps
+
+It is common to having `FIXME: ...` or `TODO: ...` comments in workflow files. To leave comment to a step with minimal overhead:
+
+```yaml
+jobs:
+  build:
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      # FIXME: This place requires overhead on processing indent, confusing target line/ste.
+      - name: Print current date
+        run: date
+      - # NOTE: strictly bound to this step, allowing compact arrangement.
+        name: Print current directory
+        run: pwd
+```
+
+### Printing step stdout to `GITHUB_STEP_SUMMARY`
+
+In addition to step summary([docs.github.com](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary)), it is convinent to print to stdout at the same time.
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - # Print only to summary, contents are not available in workflow run details
+        name: Print github contexts 
+        run: |
+          echo "| key               | value                        |" >> $GITHUB_STEP_SUMMARY
+          echo "| ----------------- | ---------------------------- |" >> $GITHUB_STEP_SUMMARY
+          echo "| github.event_name | \`${{ github.event_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| github.ref        | \`${{ github.ref }}\`        |" >> $GITHUB_STEP_SUMMARY
+
+      - # use `tee -a` to keep terminal output, multiplexing to summary. use `>>` to reduce verbosity in formatting output.
+        name: Print system information 
+        run: |
+          echo "\`\`\` >> $GITHUB_STEP_SUMMARY
+          lscpu  | tee -a $GITHUB_STEP_SUMMARY
+          echo "\`\`\` >> $GITHUB_STEP_SUMMARY
+```
+
 ## Syntax
 
 ### status check functions
