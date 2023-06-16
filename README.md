@@ -23,6 +23,23 @@ $ tree -a
 └── ...
 ```
 
+### Visual aid for group in steps
+
+To reduce developer's overhead, this example will create line in GitHub Actions web UI, functions as a visual aid for rather crowded steps in single job. Intentionally minified for visual in yaml. `date` command generates harmless output, potentially useful for debugging timestamp between steps.
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - { name: "Section [1/2] - Prepare source", run: date }
+      - uses: actions/checkout@v3
+      - run: echo "processing things..."
+
+      - { name: "Section [2/2] - Build and install", run: date }
+      - run: ./configure && make && make install
+```
+
 ## Syntax
 
 ### status check functions
